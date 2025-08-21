@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Justin Bieber Fan Page</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Lightweight Justin Bieber fan page prototype." />
+<style>
+:root {
+    --bg:#0f0f13;
+    --bg-alt:#1d1f27;
+    --txt:#f5f7fa;
+    --accent:#ff5fa2;
+    --accent-grad:linear-gradient(135deg,#ff5fa2,#ffa95f);
+    --radius:18px;
+    --trans:.25s ease;
+    --shadow:0 4px 16px -4px rgba(0,0,0,.4);
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,sans-serif;
+}
+.light {
+    --bg:#f5f7fb;
+    --bg-alt:#ffffff;
+    --txt:#1e2330;
+    --accent:#ff3080;
+    --accent-grad:linear-gradient(135deg,#ff3080,#ff8c30);
+    --shadow:0 4px 16px -4px rgba(0,0,0,.15);
+}
+* { box-sizing:border-box; }
+body {
+    margin:0; background:var(--bg); color:var(--txt); line-height:1.4;
+    -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3 { line-height:1.1; margin:.2em 0 .4em; letter-spacing:.5px; }
+p { margin:.35em 0 .9em; max-width:68ch; }
+a { color:var(--accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+button, .btn {
+    cursor:pointer; border:none; font:inherit; padding:.75em 1.15em;
+    border-radius:999px; background:var(--accent-grad); color:#fff;
+    display:inline-flex; align-items:center; gap:.5em; font-weight:600;
+    box-shadow:var(--shadow); transition:var(--trans);
+}
+button:hover, .btn:hover { transform:translateY(-2px); }
+header {
+    position:relative; overflow:hidden;
+    background:radial-gradient(circle at 30% 20%,rgba(255,95,162,.35),transparent 60%),
+                         radial-gradient(circle at 80% 70%,rgba(255,169,95,.25),transparent 65%);
+    padding:clamp(3rem,10vh,6rem) 1.25rem 4rem;
+    text-align:center;
+}
+header:before, header:after {
+    content:""; position:absolute; width:600px; height:600px; background:conic-gradient(from 120deg,var(--accent),transparent 70%);
+    filter:blur(120px) saturate(150%); opacity:.18; pointer-events:none;
+    animation:spin 28s linear infinite;
+}
+header:after { animation-duration:42s; top:-200px; right:-200px; }
+header:before { left:-250px; top:-250px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.hero-title {
+    font-size:clamp(2.2rem,7vw,4.25rem);
+    background:var(--accent-grad); -webkit-background-clip:text; color:transparent;
+    font-weight:800; margin-bottom:.5rem;
+}
+nav {
+    position:sticky; top:0; backdrop-filter:blur(10px);
+    background:rgba(20,20,25,.65); padding:.6rem 1rem; display:flex; gap:1rem;
+    align-items:center; z-index:50;
+}
+.light nav { background:rgba(255,255,255,.65); }
+nav a {
+    padding:.55em 1em; border-radius:999px; font-weight:500;
+    background:rgba(255,255,255,.08);
+}
+.light nav a { background:rgba(0,0,0,.06); }
+nav a.active, nav a:hover { background:var(--accent-grad); color:#fff; text-decoration:none; }
+.container { width:min(1200px,90%); margin-inline:auto; padding:3rem 0; }
+.grid { display:grid; gap:2rem; }
+.resp-3 { grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); }
+.card {
+    background:var(--bg-alt); padding:1.2rem 1.2rem 1.4rem; border-radius:var(--radius);
+    position:relative; overflow:hidden; display:flex; flex-direction:column; gap:.6rem;
+    box-shadow:var(--shadow); isolation:isolate;
+}
+.card:before {
+    content:""; position:absolute; inset:0; background:
+        linear-gradient(140deg,rgba(255,95,162,.18),rgba(255,169,95,.12) 55%,transparent);
+    mix-blend-mode:overlay; opacity:.9; pointer-events:none;
+}
+.album-cover {
+    width:100%; aspect-ratio:1; object-fit:cover;
+    border-radius:14px; box-shadow:0 4px 18px -6px rgba(0,0,0,.5);
+}
+.tag { font-size:.65rem; letter-spacing:1px; text-transform:uppercase; opacity:.8; }
+.inline-badges { display:flex; flex-wrap:wrap; gap:.4rem; }
+.badge {
+    padding:.35em .75em; border-radius:999px; font-size:.65rem;
+    background:rgba(255,255,255,.08);
+}
+.light .badge { background:rgba(0,0,0,.08); }
+.section-head {
+    display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:1rem;
+    margin-bottom:1.5rem;
+}
+.media-grid { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+.media-grid img {
+    width:100%; aspect-ratio:4/5; object-fit:cover;
+    border-radius:16px; position:relative;
+    transition:var(--trans);
+}
+.media-grid figure { margin:0; position:relative; }
+.media-grid figure:hover img { transform:translateY(-6px); }
+small { opacity:.75; font-size:.75rem; }
+footer {
+    text-align:center; padding:3rem 1rem 4rem; font-size:.8rem; opacity:.7;
+}
+.split {
+    display:grid; gap:3rem; grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    align-items:start;
+}
+form {
+    display:grid; gap:1rem;
+}
+input, textarea, select {
+    width:100%; padding:.85em 1em; border:1px solid rgba(255,255,255,.15);
+    background:rgba(0,0,0,.25); color:inherit; border-radius:12px; font:inherit;
+    transition:var(--trans);
+}
+.light input, .light textarea, .light select {
+    background:#fff; border-color:#ddd;
+}
+input:focus, textarea:focus, select:focus {
+    outline:2px solid var(--accent); border-color:var(--accent);
+}
+progress {
+    width:100%; height:10px; border-radius:999px; overflow:hidden;
+    background:var(--bg-alt);
+}
+progress::-webkit-progress-bar { background:var(--bg-alt); }
+progress::-webkit-progress-value { background:var(--accent-grad); }
+#countdown { font-weight:600; background:var(--bg-alt); padding:.7em 1em; border-radius:999px; }
+.actions { display:flex; gap:.8rem; flex-wrap:wrap; }
+/* Center hero tagline & button row */
+header .tagline { margin-left:auto; margin-right:auto; }
+header .actions { justify-content:center; }
+/* Hero slideshow (local images) */
+.hero-slideshow { position:absolute; inset:0; z-index:-2; overflow:hidden; }
+.hero-slideshow img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; animation:fadeSlide 36s linear infinite; filter:brightness(.45) contrast(1.05) saturate(1.15); transform:scale(1.15); }
+.hero-slideshow img:nth-child(1){ animation-delay:0s; }
+.hero-slideshow img:nth-child(2){ animation-delay:6s; }
+.hero-slideshow img:nth-child(3){ animation-delay:12s; }
+.hero-slideshow img:nth-child(4){ animation-delay:18s; }
+.hero-slideshow img:nth-child(5){ animation-delay:24s; }
+.hero-slideshow img:nth-child(6){ animation-delay:30s; }
+@keyframes fadeSlide { 0%{opacity:0;} 3%{opacity:1;} 14%{opacity:1; transform:scale(1);} 17%{opacity:0;} 100%{opacity:0;} }
+@media (prefers-reduced-motion:reduce){ .hero-slideshow img{ animation:none; opacity:0; } .hero-slideshow img:first-child{ opacity:1; } }
+/* Animated gallery images */
+.animated-gallery figure { position:relative; overflow:hidden; }
+.animated-gallery img { animation:ken 22s ease-in-out infinite; transform-origin:center; }
+.animated-gallery figure:nth-child(odd) img { animation-delay:11s; }
+@keyframes ken { 0%{transform:scale(1) translateY(0);} 50%{transform:scale(1.08) translateY(-2%);} 100%{transform:scale(1) translateY(0);} }
+/* ========================================= */
+/* Creative Enhancements                     */
+/* ========================================= */
+@keyframes gradientMove { 0%{background-position:0 50%;} 50%{background-position:100% 50%;} 100%{background-position:0 50%;} }
+@keyframes glow { 0%,100%{ text-shadow:0 0 10px rgba(255,95,162,.55),0 0 25px rgba(255,169,95,.15);} 50%{ text-shadow:0 0 18px rgba(255,169,95,.7),0 0 35px rgba(255,95,162,.3);} }
+.hero-title { animation:glow 6s ease-in-out infinite; }
+button, .btn { position:relative; background:linear-gradient(135deg,#ff5fa2,#ffa95f,#ff5fa2); background-size:220% 220%; animation:gradientMove 9s ease infinite; }
+button:before, .btn:before { content:""; position:absolute; inset:0; border-radius:inherit; padding:2px; background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(255,255,255,.05)); -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; opacity:0; transition:var(--trans); }
+button:hover:before, .btn:hover:before { opacity:1; }
+.card { transition:transform .6s cubic-bezier(.22,1,.28,1), box-shadow .6s; }
+.card:hover { transform:translateY(-10px) scale(1.025); box-shadow:0 14px 42px -10px rgba(0,0,0,.7); }
+.card:after { content:""; position:absolute; inset:0; border-radius:inherit; padding:1px; background:linear-gradient(140deg,rgba(255,95,162,.65),rgba(255,169,95,.4)); -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; opacity:0; transition:.6s; pointer-events:none; }
+.card:hover:after { opacity:1; }
+/* Gallery hover overlay */
+.animated-gallery figure figcaption { position:absolute; inset:0; margin:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,rgba(15,15,20,.15),rgba(15,15,25,.55)); opacity:0; color:#fff; transition:.6s; backdrop-filter:blur(3px); font-size:.75rem; letter-spacing:1px; text-transform:uppercase; }
+.animated-gallery figure:hover figcaption { opacity:1; }
+/* Scroll reveal */
+.reveal { opacity:0; transform:translateY(38px); transition:opacity .9s ease, transform .9s cubic-bezier(.22,1,.28,1); }
+.reveal.visible { opacity:1; transform:none; }
+/* Confetti */
+.confetti-piece { position:fixed; width:10px; height:14px; top:-20px; left:0; background:var(--accent); opacity:.85; pointer-events:none; animation:confettiFall linear forwards; will-change:transform; }
+@keyframes confettiFall { to { transform:translate3d(var(--x), 110vh,0) rotate(var(--r)); } }
+/* Focus ring tweak */
+:focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:8px; }
+.toggle {
+    display:inline-flex; align-items:center; gap:.4rem; font-size:.8rem;
+    background:var(--bg-alt); padding:.55em .9em; border-radius:999px;
+    border:1px solid rgba(255,255,255,.12);
+}
+.light .toggle { border-color:#ddd; }
+.like-btn {
+    background:var(--bg-alt); color:var(--accent); font-weight:600;
+    padding:.55em .95em; border-radius:999px; display:inline-flex; gap:.5em; align-items:center;
+    border:1px solid rgba(255,255,255,.15);
+}
+.like-btn:hover { background:var(--accent-grad); color:#fff; }
+.light .like-btn { border-color:#ddd; }
+.audio-list { list-style:none; margin:0; padding:0; display:grid; gap:.75rem; }
+.audio-item {
+    display:flex; gap:.75rem; align-items:center; background:var(--bg-alt);
+    padding:.7rem 1rem; border-radius:14px; box-shadow:var(--shadow);
+}
+.audio-item button {
+    background:var(--accent-grad); width:42px; height:42px; padding:0; flex:0 0 42px;
+    justify-content:center; border-radius:50%;
+}
+.marquee {
+    width:100%; overflow:hidden; position:relative; mask:linear-gradient(90deg,transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+    display:flex; gap:3rem; animation:scroll 30s linear infinite;
+    padding:1rem 0; font-weight:600; font-size:clamp(.75rem,2.5vw,1rem);
+    letter-spacing:2px; text-transform:uppercase; white-space:nowrap;
+}
+@keyframes scroll {
+    from { transform:translateX(0); }
+    to { transform:translateX(-50%); }
+}
+.alert { font-size:.75rem; opacity:.7; }
+.carousel {
+    position:relative; overflow:hidden; border-radius:20px; aspect-ratio:21/9;
+    background:#000;
+}
+.carousel-track {
+    display:flex; width:100%; height:100%; transition:transform .8s cubic-bezier(.65,.05,.36,1);
+}
+.carousel-track img {
+    width:100%; object-fit:cover; flex:0 0 100%; filter:brightness(.9);
+}
+.carousel button {
+    position:absolute; top:50%; transform:translateY(-50%);
+    background:rgba(0,0,0,.45); backdrop-filter:blur(6px);
+    width:46px; height:46px; border-radius:50%; padding:0;
+}
+.carousel button:hover { background:rgba(0,0,0,.7); }
+.carousel button[disabled] { opacity:.35; pointer-events:none; }
+.indicators {
+    position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+    display:flex; gap:.4rem;
+}
+.indicators button {
+    width:12px; height:12px; padding:0; background:rgba(255,255,255,.45);
+    border-radius:50%; box-shadow:none;
+}
+.indicators button.active { background:var(--accent-grad); }
+@media (prefers-reduced-motion:reduce) {
+    * { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition:none !important; }
+    .marquee-track { animation:none; }
+}
+</style>
+</head>
+<body>
+<nav aria-label="Primary">
+    <a href="#about" class="active">About</a>
+    <a href="#discography">Discography</a>
+    <a href="#media">Media</a>
+    <a href="#community">Community</a>
+    <span class="actions">
+        <button id="themeToggle" aria-pressed="false" class="toggle">🌙 <span>Dark</span></button>
+        <button id="likeBtn" class="like-btn" aria-pressed="false">❤️ <span id="likeCount">0</span></button>
+    </span>
+</nav>
+
+<header id="about">
+    <div class="hero-slideshow" aria-hidden="true">
+        <img src="image/justin1.jpg" alt="" loading="lazy">
+        <img src="image/justin2.jpg" alt="" loading="lazy">
+        <img src="image/justin3.jpg" alt="" loading="lazy">
+        <img src="image/justin4.jpg" alt="" loading="lazy">
+        <img src="image/justin5.jpg" alt="" loading="lazy">
+        <img src="image/justin6.jpg" alt="" loading="lazy">
+    </div>
+    <h1 class="hero-title" aria-label="Justin Bieber">Justin Bieber</h1>
+    <p class="tagline">Global pop artist. Music, moments, and a supportive fan community.</p>
+    <div class="actions">
+        <a class="btn" href="#discography">Explore Music →</a>
+        <a class="btn" href="#community">Join Community</a>
+    </div>
+    <div style="margin-top:2rem; display:flex; justify-content:center;">
+        <div id="countdown" aria-live="polite">Loading next milestone...</div>
+    </div>
+</header>
+
+<section class="container" id="highlights" aria-labelledby="hl-head">
+    <div class="section-head">
+        <h2 id="hl-head">Highlights</h2>
+        <small>Real-time updates are illustrative only.</small>
+    </div>
+    <div class="grid resp-3">
+        <div class="card">
+            <span class="tag">Milestone</span>
+            <h3>Streaming Impact</h3>
+            <p>Billions of global streams across platforms, illustrating sustained listener engagement.</p>
+            <progress max="100" value="92" aria-label="Progress toward illustrative milestone"></progress>
+        </div>
+        <div class="card">
+            <span class="tag">Community</span>
+            <h3>Fan Interaction</h3>
+            <p>Active online communities share art, edits & support initiatives.</p>
+            <button class="btn" onclick="alert('Thanks for your support!')">Support</button>
+        </div>
+        <div class="card">
+            <span class="tag">Live</span>
+            <h3>Tour Energy</h3>
+            <p>Live shows blend vocals, production & immersive staging.</p>
+            <button class="btn" id="carouselJump">View Gallery</button>
+        </div>
+    </div>
+</section>
+
+<section class="container" id="discography" aria-labelledby="discog-head">
+    <div class="section-head">
+        <h2 id="discog-head">Discography (Select)</h2>
+        <small>Cover imagery placeholders.</small>
+    </div>
+    <div class="grid resp-3">
+        <!-- Example albums (no lyrics) -->
+        <article class="card">
+            <img class="album-cover" src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=600&q=60" alt="Album abstract cover 1" loading="lazy">
+            <h3>Purpose</h3>
+            <div class="inline-badges">
+                <span class="badge">Pop</span><span class="badge">EDM</span><span class="badge">2015</span>
+            </div>
+            <p>Notable for its polished production & global chart presence.</p>
+            <button class="btn small" data-play="sample1">Play Sample</button>
+        </article>
+        <article class="card">
+            <img class="album-cover" src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=600&q=60" alt="Album abstract cover 2" loading="lazy">
+            <h3>Changes</h3>
+            <div class="inline-badges">
+                <span class="badge">R&B</span><span class="badge">2020</span>
+            </div>
+            <p>Smooth R&B leaning direction & mellow tonal palette.</p>
+            <button class="btn small" data-play="sample2">Play Sample</button>
+        </article>
+        <article class="card">
+            <img class="album-cover" src="https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=600&q=60" alt="Album abstract cover 3" loading="lazy">
+            <h3>Justice</h3>
+            <div class="inline-badges">
+                <span class="badge">Pop</span><span class="badge">2021</span>
+            </div>
+            <p>Blends anthemic hooks and emotive themes.</p>
+            <button class="btn small" data-play="sample3">Play Sample</button>
+        </article>
+    </div>
+    <ul class="audio-list" style="margin-top:2rem;">
+        <li class="audio-item">
+            <button aria-label="Play/Pause" data-audio="sample1">▶</button>
+            <div style="flex:1;">
+                <strong>Sample 1</strong>
+                <progress max="100" value="0" data-progress="sample1"></progress>
+            </div>
+        </li>
+        <li class="audio-item">
+            <button aria-label="Play/Pause" data-audio="sample2">▶</button>
+            <div style="flex:1;">
+                <strong>Sample 2</strong>
+                <progress max="100" value="0" data-progress="sample2"></progress>
+            </div>
+        </li>
+        <li class="audio-item">
+            <button aria-label="Play/Pause" data-audio="sample3">▶</button>
+            <div style="flex:1;">
+                <strong>Sample 3</strong>
+                <progress max="100" value="0" data-progress="sample3"></progress>
+            </div>
+        </li>
+    </ul>
+    <p class="alert">Audio samples are placeholder tone bleeps (no copyrighted material).</p>
+</section>
+
+<section class="container" id="media" aria-labelledby="media-head">
+    <div class="section-head">
+        <h2 id="media-head">Media & Gallery</h2>
+        <small>Embedded video + carousel.</small>
+    </div>
+    <div class="split">
+        <div>
+            <div class="carousel" aria-label="Concert Carousel">
+                <div class="carousel-track" id="carouselTrack">
+                    <img src="image/justin1.jpg" alt="Slideshow image 1" loading="lazy">
+                    <img src="image/justin2.jpg" alt="Slideshow image 2" loading="lazy">
+                    <img src="image/justin3.jpg" alt="Slideshow image 3" loading="lazy">
+                    <img src="image/justin4.jpg" alt="Slideshow image 4" loading="lazy">
+                    <img src="image/justin5.jpg" alt="Slideshow image 5" loading="lazy">
+                    <img src="image/justin6.jpg" alt="Slideshow image 6" loading="lazy">
+                </div>
+                <button id="prevSlide" aria-label="Previous">⟨</button>
+                <button id="nextSlide" aria-label="Next">⟩</button>
+                <div class="indicators" id="indicators" aria-hidden="true"></div>
+            </div>
+            <p style="margin-top:1rem;">Swipe / click to navigate performance visuals (generic placeholders).</p>
+        </div>
+        <div>
+            <div style="position:relative; padding-top:56%; border-radius:18px; overflow:hidden; background:#000;">
+                <iframe title="YouTube Performance (Official channel content)" loading="lazy" style="position:absolute; inset:0; width:100%; height:100%; border:0;" src="https://www.youtube.com/embed/kffacxfA7G4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <p style="margin-top:1rem;">Official music video embedded for fan viewing (via YouTube).</p>
+        </div>
+    </div>
+    <div style="margin-top:3rem;">
+        <div class="marquee" aria-hidden="true">
+            <div class="marquee-track" id="marqueeTrack">
+                <span>Beliebers Unite</span><span>Support • Positivity • Creativity</span><span>Global Community</span><span>Beliebers Unite</span><span>Support • Positivity • Creativity</span><span>Global Community</span>
+            </div>
+        </div>
+    </div>
+    <div class="media-grid animated-gallery" style="margin-top:2.5rem;">
+        <figure>
+            <img src="image/justin1.jpg" alt="Gallery image 1">
+            <figcaption><small>Moment 1</small></figcaption>
+        </figure>
+        <figure>
+            <img src="image/justin2.jpg" alt="Gallery image 2">
+            <figcaption><small>Moment 2</small></figcaption>
+        </figure>
+        <figure>
+            <img src="image/justin3.jpg" alt="Gallery image 3">
+            <figcaption><small>Moment 3</small></figcaption>
+        </figure>
+        <figure>
+            <img src="image/justin4.jpg" alt="Gallery image 4">
+            <figcaption><small>Moment 4</small></figcaption>
+        </figure>
+        <figure>
+            <img src="image/justin5.jpg" alt="Gallery image 5">
+            <figcaption><small>Moment 5</small></figcaption>
+        </figure>
+        <figure>
+            <img src="image/justin6.jpg" alt="Gallery image 6">
+            <figcaption><small>Moment 6</small></figcaption>
+        </figure>
+    </div>
+</section>
+
+<section class="container" id="community" aria-labelledby="community-head">
+    <div class="section-head">
+        <h2 id="community-head">Community</h2>
+        <small>Connect & stay updated.</small>
+    </div>
+    <div class="split">
+        <div>
+            <h3>Join Mailing List</h3>
+            <form id="signupForm" novalidate>
+                <label>
+                    <span>Name</span>
+                    <input name="name" required minlength="2" placeholder="Your name" autocomplete="name">
+                </label>
+                <label>
+                    <span>Email</span>
+                    <input name="email" type="email" required placeholder="you@example.com" autocomplete="email">
+                </label>
+                <label>
+                    <span>Region</span>
+                    <select name="region" required>
+                        <option value="">Select region...</option>
+                        <option>Americas</option>
+                        <option>EMEA</option>
+                        <option>APAC</option>
+                    </select>
+                </label>
+                <label>
+                    <span>Message (Optional)</span>
+                    <textarea name="msg" rows="4" maxlength="300" placeholder="Say hi (no lyrics please)"></textarea>
+                </label>
+                <label style="display:flex; gap:.55rem; align-items:center; font-size:.8rem;">
+                    <input type="checkbox" required style="width:auto;"> I agree to receive email updates.
+                </label>
+                <button class="btn" type="submit">Subscribe</button>
+                <div id="formStatus" role="status" aria-live="polite" style="font-size:.75rem;"></div>
+            </form>
+        </div>
+        <div>
+            <h3>Live Chat (Mock)</h3>
+            <div id="chat" style="background:var(--bg-alt); padding:1rem; border-radius:16px; height:340px; display:flex; flex-direction:column; gap:.75rem; overflow:auto; font-size:.85rem;">
+                <div aria-live="polite" aria-atomic="false" id="chatLog"></div>
+            </div>
+            <form id="chatForm" style="margin-top:.8rem; display:flex; gap:.5rem;">
+                <input name="chatMsg" placeholder="Share positive vibes..." maxlength="140" required>
+                <button class="btn" type="submit">Send</button>
+            </form>
+            <small>Note: Mock client-side only; content not persisted.</small>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>Fan page prototype. Not affiliated with the official artist. Assets are placeholders; avoid sharing proprietary lyrics or unreleased material.</p>
+</footer>
+
+<!-- Hidden audio placeholders (pure tones) -->
+<audio id="sample1" preload="auto">
+    <source src="data:audio/wav;base64,UklGRkQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAA" type="audio/wav">
+</audio>
+<audio id="sample2" preload="auto">
+    <source src="data:audio/wav;base64,UklGRkQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAA" type="audio/wav">
+</audio>
+<audio id="sample3" preload="auto">
+    <source src="data:audio/wav;base64,UklGRkQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAA" type="audio/wav">
+</audio>
+
+<script>
+/* Theme toggle */
+const themeBtn = document.getElementById('themeToggle');
+function setTheme(mode){
+    if(mode==='light'){ document.documentElement.classList.add('light'); themeBtn.querySelector('span').textContent='Light'; themeBtn.setAttribute('aria-pressed','true'); }
+    else { document.documentElement.classList.remove('light'); themeBtn.querySelector('span').textContent='Dark'; themeBtn.setAttribute('aria-pressed','false'); }
+    localStorage.setItem('theme',mode);
+}
+themeBtn.addEventListener('click',()=>{
+    const isLight=document.documentElement.classList.toggle('light');
+    setTheme(isLight?'light':'dark');
+});
+setTheme(localStorage.getItem('theme')|| (matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'));
+
+/* Smooth nav highlighting */
+const navLinks=[...document.querySelectorAll('nav a')];
+const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+        if(e.isIntersecting){
+            navLinks.forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+e.target.id));
+        }
+    });
+},{threshold:.35});
+['about','discography','media','community'].forEach(id=>{ const el=document.getElementById(id); if(el) obs.observe(el); });
+
+/* Countdown (dummy upcoming date) */
+function updateCountdown(){
+    const target=new Date(new Date().getFullYear(),11,25,0,0,0); // Dec 25 this year
+    const now=new Date();
+    if(now>target){ target.setFullYear(target.getFullYear()+1); }
+    const diff=target-now;
+    const d=Math.floor(diff/864e5), h=Math.floor(diff/36e5)%24, m=Math.floor(diff/6e4)%60;
+    document.getElementById('countdown').textContent='Next global fan celebration in '+d+'d '+h+'h '+m+'m';
+}
+updateCountdown(); setInterval(updateCountdown,6e4);
+
+/* Likes */
+const likeBtn=document.getElementById('likeBtn'); const likeCount=document.getElementById('likeCount');
+let likes=Number(localStorage.getItem('likes')||0); likeCount.textContent=likes;
+likeBtn.addEventListener('click',()=>{
+    const pressed=likeBtn.getAttribute('aria-pressed')==='true';
+    likeBtn.setAttribute('aria-pressed', String(!pressed));
+    likes += pressed? -1 : 1;
+    likeCount.textContent=likes;
+    localStorage.setItem('likes',likes);
+    if(!pressed && (likes===10 || likes===25 || likes===50)){ launchConfetti(); }
+});
+
+/* Audio sample controls */
+const audioButtons=document.querySelectorAll('[data-audio]');
+audioButtons.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        const id=btn.dataset.audio;
+        const el=document.getElementById(id);
+        if(el.paused){ pauseAll(); el.play(); btn.textContent='❚❚'; }
+        else { el.pause(); btn.textContent='▶'; }
+    });
+});
+function pauseAll(){ audioButtons.forEach(b=>b.textContent='▶'); document.querySelectorAll('audio').forEach(a=>a.pause()); }
+document.querySelectorAll('audio').forEach(a=>{
+    a.addEventListener('timeupdate',()=>{
+        const progress=document.querySelector('[data-progress="'+a.id+'"]');
+        if(progress) progress.value=(a.currentTime / (a.duration||1))*100;
+    });
+    a.addEventListener('ended',()=>{ const btn=[...audioButtons].find(b=>b.dataset.audio===a.id); if(btn) btn.textContent='▶'; });
+});
+/* Quick play from album buttons */
+document.querySelectorAll('[data-play]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        const id=btn.dataset.play;
+        const playBtn=document.querySelector('[data-audio="'+id+'"]');
+        if(playBtn) playBtn.click();
+    });
+});
+
+/* Signup form validation */
+const signupForm=document.getElementById('signupForm'); const formStatus=document.getElementById('formStatus');
+signupForm.addEventListener('submit',e=>{
+    e.preventDefault();
+    if(!signupForm.checkValidity()){
+        formStatus.textContent='Please complete required fields.'; formStatus.style.color='var(--accent)';
+        return;
+    }
+    formStatus.textContent='Submitting...';
+    setTimeout(()=>{ formStatus.textContent='Subscribed! Check your inbox soon.'; formStatus.style.color='lime'; signupForm.reset(); },800);
+});
+
+/* Chat (mock) */
+const chatForm=document.getElementById('chatForm'); const chatLog=document.getElementById('chatLog');
+function addChat(msg, author='You'){
+    const div=document.createElement('div');
+    div.innerHTML='<strong>'+author+':</strong> '+msg;
+    chatLog.appendChild(div);
+    chatLog.parentElement.scrollTop=chatLog.parentElement.scrollHeight;
+}
+chatForm.addEventListener('submit',e=>{
+    e.preventDefault();
+    const input=chatForm.chatMsg;
+    const text=input.value.trim();
+    if(!text) return;
+    addChat(text);
+    input.value='';
+    // Simulated bot reply
+    setTimeout(()=>addChat('Thanks for keeping it positive!','Bot'), 600);
+});
+
+/* Carousel */
+const track=document.getElementById('carouselTrack');
+const slides=[...track.children];
+let currentIndex=0;
+const prev=document.getElementById('prevSlide');
+const next=document.getElementById('nextSlide');
+const indicators=document.getElementById('indicators');
+slides.forEach((_,i)=>{
+    const dot=document.createElement('button');
+    dot.addEventListener('click',()=>goTo(i));
+    indicators.appendChild(dot);
+});
+function updateCarousel(){
+    track.style.transform='translateX(' + (-currentIndex*100) + '%)';
+    prev.disabled=currentIndex===0;
+    next.disabled=currentIndex===slides.length-1;
+    [...indicators.children].forEach((b,i)=>b.classList.toggle('active', i===currentIndex));
+}
+function goTo(i){ currentIndex=i; updateCarousel(); }
+prev.addEventListener('click',()=>{ if(currentIndex>0) currentIndex--; updateCarousel(); });
+next.addEventListener('click',()=>{ if(currentIndex<slides.length-1) currentIndex++; updateCarousel(); });
+updateCarousel();
+let auto=setInterval(()=>{ currentIndex=(currentIndex+1)%slides.length; updateCarousel(); }, 4500);
+track.addEventListener('pointerenter',()=>clearInterval(auto));
+track.addEventListener('pointerleave',()=>auto=setInterval(()=>{ currentIndex=(currentIndex+1)%slides.length; updateCarousel(); },4500));
+document.getElementById('carouselJump').addEventListener('click',()=>document.getElementById('media').scrollIntoView({behavior:'smooth'}));
+
+/* Prefers reduced motion respect for marquee */
+if(matchMedia('(prefers-reduced-motion:reduce)').matches){
+    document.getElementById('marqueeTrack').style.animation='none';
+}
+
+/* Keyboard shortcuts */
+window.addEventListener('keydown',e=>{
+    if(e.key==='m'){ themeBtn.click(); }
+    if(e.key==='Escape'){ pauseAll(); }
+});
+
+/* Accessibility quick enhancements */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+        const id=a.getAttribute('href').substring(1);
+        if(id){
+            e.preventDefault();
+            const target=document.getElementById(id);
+            if(target) target.scrollIntoView({behavior:'smooth'});
+        }
+    });
+});
+
+/* Scroll reveal */
+const revealEls=[...document.querySelectorAll('.card, .section-head, .media-grid figure, .audio-item, footer p')];
+revealEls.forEach(el=>el.classList.add('reveal'));
+const ro=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
+},{threshold:.15});
+revealEls.forEach(el=>ro.observe(el));
+
+/* Confetti celebration */
+function launchConfetti(){
+    for(let i=0;i<120;i++){
+        const div=document.createElement('div');
+        div.className='confetti-piece';
+        const hue= (Math.random()*50)+320; // pinkish
+        div.style.background='hsl('+hue+',80%,60%)';
+        const x=(Math.random()*100)+'vw';
+        div.style.left=x;
+        const rot=(Math.random()*720-360)+'deg';
+        div.style.setProperty('--x',(Math.random()*60-30)+'vw');
+        div.style.setProperty('--r',rot);
+        const dur=(Math.random()*2+4)+'s';
+        div.style.animationDuration=dur;
+        div.style.animationDelay=(Math.random()*.2)+'s';
+        document.body.appendChild(div);
+        setTimeout(()=>div.remove(),6000);
+    }
+}
+</script>
+</body>
+</html>
