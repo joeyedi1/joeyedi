@@ -35,16 +35,38 @@ function show(button_element) {
     // Check out the 'facts' const declared above.
     // What is the data type of this const? Is this an (indexed) Array? or Object?
 
+    let buttonId = button_element.id; // Get the id of the clicked button
+    let funFact = facts[buttonId]; // Retrieve the fun fact using the button id
+
+    // Get the HTML element to display the fun fact
+    let factElement = document.getElementById("ta-fun-fact"); 
+    // Update the text content with the fun fact
+    factElement.innerText = funFact; 
+
     // Task 2 - Photo
     // Now that you know which TA was selected by the user,
     //  how do you access the TA's photo? Where is his/her photo?
     // Where in the HTML should this photo be displayed?
     // How can you replace the default photo with this TA's photo?
-
+    let photoElement = document.getElementById("ta-photo"); // Get the HTML element for the photo
+    photoElement.src = `photos/${buttonId}.jpg`; // Update the src attribute to show the selected TA's photo
+    
     // Task 3 - Highlighting & Un-highlighting buttons
     // For the selected TA, his/her button should be having a 'yellow' background
     //  and its text color set to 'black'.
-    
+    button_element.style.backgroundColor = "aqua";
+    button_element.style.color = "black";
+
+//     After the user selects the first TA and then clicks on another TA’s button, the previously selected TA’s button should be changed back to default setting as specified in styles.css and that is:
+// Background color: darkblue
+// Text color: white
+    let buttons = document.getElementsByTagName("button"); // Get all button elements
+    for (let btn of buttons) {
+        if (btn.id !== buttonId) { // If this button is not the clicked button
+            btn.style.backgroundColor = "darkblue"; // Reset background color
+            btn.style.color = "white"; // Reset text color
+        }
+    }
 }
 
 // Please avoid writing spaghetti code!
