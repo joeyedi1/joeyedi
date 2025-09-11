@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Palindrome</title>
+</head>
+<body>
+
+	<script>
+		var str = prompt("If you provide a string, I will tell you if it is a Palindrome!"); 
+       // TODO: add your code here
+
+	   var reversedStr = str.split('').reverse().join('');
+	   if (str === reversedStr) {
+		   console.log(str + " is a Palindrome!");
+	   } else {
+		   console.log(str + " is NOT a Palindrome!");
+	   }
+	   console.log("Thank you for using the Palindrome Checker!");
+	   
+	</script>
+</body>
+</html>

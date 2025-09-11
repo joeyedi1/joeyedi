@@ -1,0 +1,19 @@
+/* parent */
+#one {
+    background-color: yellow;
+    width: 400px;
+    height: 400px;
+    margin: auto;
+
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* child */
+img {
+    width: 70%;
+}

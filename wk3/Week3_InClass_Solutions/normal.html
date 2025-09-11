@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normal (No Bootstrap)</title>
+    <style>
+        /* universal selector */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #box1 {
+            background-color: yellow;
+        }
+
+        #box2 {
+            background-color: green;
+        }
+
+        #box3 {
+            background-color: red;
+        }
+
+        .parent {
+            /* display: block; */
+            display: flex;
+        }
+
+        /* On screens that are 600px wide or less, we will make the child boxes
+            stack on top of each other instead of next to each other */
+        @media screen and (max-width: 600px) {
+            .parent {
+                display: block;
+            }
+
+            .child {
+                opacity: 0.5;
+            }
+        }
+
+        /* On screens that are 400px wide or less, we will make the child boxes
+            text to be smaller */
+        @media screen and (max-width: 400px) {
+
+            .parent {
+                display: block;
+            }
+            
+            .child {
+                font-size: 50%;
+            }
+
+            #box1, #box2, #box3 {
+                background-color: black;
+                color: white;
+                margin-bottom: 10px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="parent">
+    
+        <div class="child" id="box1">
+            Box 1.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Error possimus maiores veniam, obcaecati corporis, assumenda soluta numquam incidunt neque recusandae, aperiam itaque pariatur nulla iure atque ipsam. Qui, vero deleniti.
+        </div>
+
+        <div class="child" id="box2">
+            Box 2.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Error possimus maiores veniam, obcaecati corporis, assumenda soluta numquam incidunt neque recusandae, aperiam itaque pariatur nulla iure atque ipsam. Qui, vero deleniti.
+        </div>
+        
+        <div class="child" id="box3">
+            Box 3.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Error possimus maiores veniam, obcaecati corporis, assumenda soluta numquam incidunt neque recusandae, aperiam itaque pariatur nulla iure atque ipsam. Qui, vero deleniti.
+        </div>
+
+    </div>
+
+</body>
+</html>

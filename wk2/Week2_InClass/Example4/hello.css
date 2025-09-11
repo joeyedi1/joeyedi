@@ -1,0 +1,23 @@
+.block-demo {
+    background-color: aqua;
+    margin: 6px 0px;
+    padding: 8px;
+}
+
+.inline-demo {
+    display: inline;
+    background-color: pink;
+    margin: 6px;
+    padding: 4px;
+    width: 120px;
+    height: 100px;
+}
+
+.inline-block {
+    display: inline-block;
+    background-color: yellow;
+    margin: 6px;
+    width: 120px;
+    height: 100px;
+    line-height: 50px;
+}
