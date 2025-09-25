@@ -14,6 +14,13 @@ function generate_board() {
 
 
     // YOUR CODE GOES HERE
+    const friend_select = document.getElementById('friends');
+    for (let i = 0; i < friend_select.options.length; i++) {
+        if (friend_select.options[i].selected) {
+            friends.push(friend_select.options[i].value);
+        }
+    }
+
 
     // Display user's selection in Developer Tools --> Console.
     console.log(friends);
@@ -48,6 +55,32 @@ function generate_board() {
     const fruits = [ 'apple', 'banana', 'kiwi', 'orange' ];
 
     // YOUR CODE GOES HERE
+    let cards = []; // Initialize to empty
+
+    // For each selected friend
+    for (let i = 0; i < friends.length; i++) {
+        const friend = friends[i];
+
+        // For each fruit
+        for (let j = 0; j < fruits.length; j++) {
+            const fruit = fruits[j];
+
+            // Create two cards for the friend-fruit combination
+            const card1 = `${fruit}_${friend}.png`;
+            const card2 = `${fruit}_${friend}.png`;
+
+            // Add the two cards to the cards array
+            cards.push(card1);
+            cards.push(card2);
+        }
+    }
+
+    // Shuffle the cards array to randomize the order of cards
+    cards = shuffleArray(cards);
+
+    // Display the finalized, randomized list of card names in Developer Tools --> Console.
+    console.log(cards);         
+
 
 
 
@@ -73,14 +106,88 @@ function generate_board() {
 
     // YOUR CODE GOES HERE
 
-    // You will need to rewrite the value of this result_str (String).
-    let result_str = `
-        <div style='color: red'>
-            <p>This is a sample HTML code that will replace the parent div's innerHTML!</p>
-            <p>Instead of paragraph texts, you will display cards here.</p>
-        </div>
-    `;
+    // Create a 2D array to represent the game board
+    const game_board = [];
+    for (let i = 0; i < num_rows; i++) {
+        game_board[i] = [];
+        for (let j = 0; j < num_cols; j++) {
+            game_board[i][j] = cards.pop(); // Get a card from the shuffled deck
+        }
+    }
+    console.log(game_board);    
 
+    // Prepare the HTML string to represent the game board
+    // Use a table for layout
+    result_str = `<table border='1' style='border-collapse: collapse;'>`;
+
+    for (let i = 0; i < num_rows; i++) {
+        result_str += `<tr>`; // Start a new row
+        for (let j = 0; j < num_cols; j++) {
+            const card = game_board[i][j];
+            result_str += `
+                <td style='padding: 10px; text-align: center;'>
+                    <img src='images/${card}' alt='${card}' style='width: 100px; height: 100px;'><br>
+                    ${card}
+                </td>
+            `; // Add a cell with the card image and name
+        }
+        result_str += `</tr>`; // End the row
+    }
+
+    result_str += `</table>`; // End the table
+
+    console.log(result_str); // Display the HTML string in Developer Tools --> Console.         
+
+
+    // You will need to rewrite the value of this result_str (String).
+
+    
+    let result_str = `
+        <table border='1' style='border-collapse: collapse;'>
+            <tr>    
+                <td style='padding: 10px; text-align: center;'>
+                    <img src='images/apple_brandon.png' alt='apple_brandon.png' style='width: 100px; height: 100px;'><br>
+                    apple_brandon.png
+                </td>
+                <td style='padding: 10px; text-align: center;'>
+                    <img src='images/banana_brandon.png' alt='banana_brandon.png' style='width: 100px; height: 100px;'><br>
+                    banana_brandon.png
+                </td>
+                <td style='padding: 10px; text-align: center;'>
+                    <img src='images/kiwi_brandon.png' alt='kiwi_brandon.png' style='width: 100px; height: 100px;'><br>
+                    kiwi_brandon.png
+                </td>
+                <td style='padding: 10px; text-align: center;'>
+                    <img src='images/orange_brandon.png' alt='orange_brandon.png' style='width: 100px; height: 100px;'><br>
+                    orange_brandon.png
+                </td>
+            </tr>
+            <tr>    
+                <td style='padding: 10px; text-align: center;'>
+                    <img src='images/apple_brandon.png' alt='apple_brandon.png' style='width: 100px; height: 100px;'><br>
+                    apple_brandon.png
+                </td>
+                <td style='padding: 10px; text-align: center;'>
+                    <img src='images/banana_brandon.png' alt='banana_brandon.png' style='width: 100px; height: 100px;'><br>
+                    banana_brandon.png
+                </td>
+                <td style='padding: 10px; text-align: center;'>
+                    <img src='images/kiwi_brandon.png' alt='kiwi_brandon.png' style='width: 100px; height: 100px;'><br>
+                    kiwi_brandon.png
+                </td>
+                <td style='padding: 10px; text-align: center;'>
+                    <img src='images/orange_brandon.png' alt='orange_brandon.png' style='width: 100px; height: 100px;'><br>
+                    orange_brandon.png
+                </td>
+            </tr>
+        </table>
+        <br>
+        
+    `;
+    
+
+    console.log(result_str); // Display the HTML string in Developer Tools --> Console.
+    
 
     // DO NOT MODIFY THE FOLLOWING
     // Replace the innerHTML of <div id="game-board">
